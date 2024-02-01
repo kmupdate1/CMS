@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <style type="text/css">
+        /* Fonts */
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans:400);
+
+        /* fontawesome */
+        @import url(https://weloveiconfonts.com/api/?family=fontawesome);
+        [class*="fontawesome-"]:before {
+            font-family: 'FontAwesome', sans-serif;
+        }
+
+        /* Simple Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* body */
+        body {
+            color: #5e5e5e;
+            font: 400 87.5%/1.5em 'Open Sans', sans-serif;
+        }
+
+        /* aタグの書式・振舞い */
+        a {
+            color: #8c8c8c;
+            text-decoration: none;
+            transition: border-color 0.3s;
+        }
+
+        a:hover {
+            border-bottom: 1px dotted #8c8c8c;
+        }
+
+        /* header */
+        header{
+            position: sticky;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 0 40px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #aaa;
+            background: rgba(255, 255, 255, 100%);
+            display: flex;
+        }
+
+        /* ページロゴ */
+        header h1 {
+            padding: 30px 30px;
+        }
+
+        .logo {
+            color: #5e5e5e;
+        }
+
+        .logo:hover {
+            color: #5e5e5e;
+            border-bottom: none;
+        }
+
+        /* hamburger(ハンバーガーアイコン) */
+        .hamburger {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 300;
+            padding: 30px 30px;
+            vertical-align: middle;
+        }
+
+        .hamburger__line {
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            right: 0;
+            background-color: #5e5e5e;
+            transition: all 0.5s;
+        }
+
+        .hamburger__line--1 {
+            top: 10px;
+        }
+
+        .hamburger__line--2 {
+            top: 20px;
+        }
+
+        .hamburger__line--3 {
+            top: 30px;
+        }
+
+        /* ハンバーガーがクリックされたら */
+        .open .hamburger__line--1 {
+            transform: rotate(-45deg);
+            top: 20px;
+        }
+
+        .open .hamburger__line--2 {
+            opacity: 0;
+        }
+
+        .open .hamburger__line--3 {
+            transform: rotate(45deg);
+            top: 20px;
+        }
+
+        /* sp-nav(ナビ) */
+        .sp-nav {
+            position: fixed;
+            right: -100%; /* ハンバーガーがクリックされる前はWindow右側に隠す */
+            top: 0;
+            width: 30%; /* 出てくるスライドメニューの幅 */
+            height: 100vh;
+            padding: 50px;
+            background-color: #fff;
+            transition: all 0.5s;
+            z-index: 200;
+            overflow-y: auto; /* メニューが多くなったらスクロールできるように */
+        }
+
+        /* ハンバーガーがクリックされたら右からスライド */
+        .open .sp-nav {
+            right: 0;
+        }
+
+        /* black-bg(ハンバーガーメニュー解除用bg) */
+        .black-bg {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 5;
+            background-color: #000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s;
+            cursor: pointer;
+        }
+
+        /* ハンバーガーメニューが開いたら表示 */
+        .open .black-bg {
+            opacity: 0.3;
+            visibility: visible;
+        }
+
+        .nav-list {
+            position: relative;
+        }
+
+        .nav-list li {
+            line-height: 1.5;
+            padding: 0.5em 0;
+            list-style-type: none!important;
+        }
+
+        .nav-list li a {
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* 全体の表示領域 */
+        .content {
+            padding: 20px 20px;
+        }
+
+        /* 各ページのタイトル */
+        .title {
+            margin: 0 0 20px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 入力フォーム */
+        .form-wrapper, .form-wrapper.active {
+            background: #fafafa;
+            margin: 3em auto;
+            padding: 0 1em;
+            max-width: 370px;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        form {
+            padding: 0 1.5em;
+        }
+
+        .form-item {
+            margin-bottom: 0.75em;
+            width: 100%;
+        }
+
+        .form-item input {
+            background: #fafafa;
+            border: none;
+            border-bottom: 2px solid #e9e9e9;
+            color: #666;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1em;
+            height: 50px;
+            transition: border-color 0.3s;
+            width: 100%;
+        }
+
+        .form-item input:focus {
+            border-bottom: 2px solid #c0c0c0;
+            outline: none;
+        }
+
+        .button-panel {
+            margin: 2em 0 0;
+            width: 100%;
+        }
+
+        .button-panel .button {
+            background: #f16272;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            height: 50px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2em;
+            letter-spacing: 0.05em;
+            text-align: center;
+            text-transform: uppercase;
+            transition: background 0.3s ease-in-out;
+            width: 100%;
+        }
+
+        .button:hover {
+            background: #ee3e52;
+        }
+
+        .form-footer {
+            font-size: 1em;
+            padding: 2em 0;
+            text-align: center;
+        }
+
+        .message-signing,
+        .message-register {
+            display: none;
+            text-align: center;
+        }
+
+        .register {
+            display: none;
+        }
+
+        .file-register {
+            display: none;
+        }
+
+        .account-exists, .account-not-exists {
+            display: none;
+        }
+
+        /* リストテーブル */
+        .list-table {
+            margin: 0 0 50px 0;
+        }
+
+        .list {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            font-size: 16px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .list {
+                font-size: 12px;
+            }
+        }
+
+        .list-head {
+            background: #ccc;
+        }
+
+        .list-column {
+            padding: 0.75em 0.5em;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .list-body-row:nth-child(even) {
+            background: #eee;
+        }
+
+        .list-recode {
+            padding: 0.75em 0.5em;
+            text-align: left;
+        }
+
+        .list-recode a {
+            color: #5e5e5e;
+        }
+
+        .img-edit {
+            height: 20px;
+            width: 20px;
+        }
+
+        .link-edit:hover {
+            border-bottom: none;
+        }
+
+        /* ページネーション */
+        .pagination-wrapper {
+            display: grid;
+            height: 50px;
+            width: 300px;
+            grid-template-columns: 25% 50% 25%;
+            grid-template-rows: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pagination {
+            display: grid;
+            border: 1px #ccc solid;
+            border-radius: 5px / 5px;
+        }
+
+        .previous {
+            grid-column-start: 1;
+            grid-column-end: 2;
+            grid-row-start: 1;
+            grid-row-end: 2;
+        }
+
+        .current {
+            grid-column-start: 2;
+            grid-column-end: 3;
+            grid-row-start: 1;
+            grid-row-end: 2;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+
+        .next {
+            grid-column-start: 3;
+            grid-column-end: 4;
+            grid-row-start: 1;
+            grid-row-end: 2;
+        }
+
+        .previous:hover,
+        .next:hover {
+            background: #eee;
+        }
+
+        .pagination a {
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .pagination a:hover {
+            border-bottom: none;
+        }
+
+        .pagination p {
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        /* 詳細テーブル */
+        .details-table{
+            margin-left: auto;
+            margin-right: auto;
+            width: 500px;
+        }
+
+        .details-table-row {
+            height: 50px;
+        }
+
+        .details-table-row th {
+            width: 30%;
+            background: #ccc;
+        }
+
+        .details-table-row td {
+            width: 70%;
+            background: #eee;
+        }
+
+        .details-table-row p {
+            text-align: left;
+            margin-left: 10px;
+        }
+
+        body {
+            background-color: #2F3242;
+        }
+        svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -250px;
+            margin-left: -400px;
+        }
+        .message-box {
+            height: 200px;
+            width: 380px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: 50px;
+            color: #FFF;
+            font-family: Roboto;
+            font-weight: 300;
+        }
+        .message-box h1 {
+            font-size: 60px;
+            line-height: 46px;
+            margin-bottom: 40px;
+        }
+        .buttons-con .action-link-wrap {
+            margin-top: 40px;
+        }
+        .buttons-con .action-link-wrap a {
+            background: #68c950;
+            padding: 8px 25px;
+            border-radius: 4px;
+            color: #FFF;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s linear;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 10px
+        }
+        .buttons-con .action-link-wrap a:hover {
+            background: #5A5C6C;
+            color: #fff;
+        }
+
+        #Polygon-1 , #Polygon-2 , #Polygon-3 , #Polygon-4 , #Polygon-4, #Polygon-5 {
+            animation: float 1s infinite ease-in-out alternate;
+        }
+        #Polygon-2 {
+            animation-delay: .2s;
+        }
+        #Polygon-3 {
+            animation-delay: .4s;
+        }
+        #Polygon-4 {
+            animation-delay: .6s;
+        }
+        #Polygon-5 {
+            animation-delay: .8s;
+        }
+
+        @keyframes float {
+            100% {
+                transform: translateY(20px);
+            }
+        }
+        @media (max-width: 450px) {
+            svg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -250px;
+                margin-left: -190px;
+            }
+            .message-box {
+                top: 50%;
+                left: 50%;
+                margin-top: -100px;
+                margin-left: -190px;
+                text-align: center;
+            }
+        }
+    </style>
+<head>
+
+</head>
+<body>
+
+    <header>
+        <h1><a class="logo" href="/home">お客様管理サービス</a></h1>
+        <!--
+        <div class="nav-wrapper" id="nav-wrapper">
+            <div class="hamburger" id="js-hamburger">
+                <span class="hamburger__line hamburger__line--1"></span>
+                <span class="hamburger__line hamburger__line--2"></span>
+                <span class="hamburger__line hamburger__line--3"></span>
+            </div>
+            <nav class="sp-nav">
+                <h2><b>{{username}}</b>さん</h2>
+                <br>
+                <ul class="nav-list">
+                    <li><a href="/home">ホーム</a></li>
+                    <li><a href="/customer/list/1">お客様情報</a></li>
+                    <li><a href="/product/list/1">商品情報</a></li>
+                    <hr>
+                    <li><a href="/setting/mypage">マイページ</a></li>
+                    {{#admin}}
+                    <li><a href="/setting/account/list/1">アカウント一覧</a></li>
+                    {{/admin}}{{^admin}}{{/admin}}
+                    <hr>
+                    <li><a href="/signout">サインアウト</a></li>
+                </ul>
+            </nav>
+            <div class="black-bg" id="js-black-back"></div>
+        </div>
+        -->
+    </header>
+
+    <div class="content">
+
+        <div class="container">
+            <svg width="380px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                    <path d="M353,9 L626.664028,170 L626.664028,487 L353,642 L79.3359724,487 L79.3359724,170 L353,9 Z" id="Polygon-1" stroke="#007FB2" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                    <path d="M78.5,529 L147,569.186414 L147,648.311216 L78.5,687 L10,648.311216 L10,569.186414 L78.5,529 Z" id="Polygon-2" stroke="#EF4A5B" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                    <path d="M773,186 L827,217.538705 L827,279.636651 L773,310 L719,279.636651 L719,217.538705 L773,186 Z" id="Polygon-3" stroke="#795D9C" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                    <path d="M639,529 L773,607.846761 L773,763.091627 L639,839 L505,763.091627 L505,607.846761 L639,529 Z" id="Polygon-4" stroke="#F2773F" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                    <path d="M281,801 L383,861.025276 L383,979.21169 L281,1037 L179,979.21169 L179,861.025276 L281,801 Z" id="Polygon-5" stroke="#36B455" stroke-width="6" sketch:type="MSShapeGroup"></path>
+                </g>
+            </svg>
+            <div class="message-box">
+                <h1>404</h1>
+                <p>Page not found</p>
+                <div class="buttons-con">
+                    <div class="action-link-wrap">
+                        <a onclick="history.back(-1)" class="link-button link-back-button">Go Back</a>
+                        <a href="/home" class="link-button">Go to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

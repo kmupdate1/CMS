@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <link type="text/css" rel="stylesheet" href="/contents/css/common.css">
+    <link type="text/css" rel="stylesheet" href="/contents/css/modal.css">
+    <script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <header>
+        <h1><a class="logo" href="/home">お客様管理サービス</a></h1>
+        <div class="nav-wrapper" id="nav-wrapper">
+            <div class="hamburger" id="js-hamburger">
+                <span class="hamburger__line hamburger__line--1"></span>
+                <span class="hamburger__line hamburger__line--2"></span>
+                <span class="hamburger__line hamburger__line--3"></span>
+            </div>
+            <nav class="sp-nav">
+                <h2><b>{{username}}</b>さん</h2>
+                <br>
+                <ul class="nav-list">
+                    <li><a href="/home">ホーム</a></li>
+                    <hr>
+                    <li><a href="/customer/list/1?max=50">お客様情報</a></li>
+                    <li><a href="/product/list/1?max=50">商品情報</a></li>
+                    <li><a href="/order/list/1?max=50">注文情報</a></li>
+                    <li><a href="/receipt/yearly">年間売り上げ照会</a></li>
+                    <li><a href="/receipt/monthly">月間売り上げ照会</a></li>
+                    <hr>
+                    <li><a href="/setting/mypage">マイページ</a></li>
+                    {{#admin}}
+                        <li><a href="/setting/account/list/1?max=50">アカウント一覧</a></li>
+                    {{/admin}}{{^admin}}{{/admin}}
+                    <hr>
+                    <li><a href="/signout">サインアウト</a></li>
+                </ul>
+            </nav>
+            <div class="black-bg" id="js-black-back"></div>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <div class="form-wrapper" id="form-wrapper">
+            <div class="form-register" id="register">
+                <h1>お客様登録</h1>
+                <label class="error-message" id="message-register">登録に失敗しました</label>
+                <form class="customer-register h-adr" id="customer-register" action="/customer/register{{#edit}}/{{customer.id}}{{/edit}}">
+                    <span class="p-country-name" style="display:none;">Japan</span>
+                    <div class="form-item">
+                        <label id="customer-name"></label>
+                        <input type="text" id="name-register" name="name" placeholder="名前" {{#edit}}value="{{customer.name}}"{{/edit}} required>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-name-kana"></label>
+                        <input type="text" id="name-kana-register" name="name-kana" placeholder="名前（カナ）" {{#edit}}value="{{customer.nameKana}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-zipcode"></label>
+                        <input class="p-postal-code" type="text" id="zipcode-register" name="zipcode" placeholder="郵便番号" {{#edit}}value="{{customer.zipcode}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-prefecture"></label>
+                        <input class="p-region" type="text" id="prefecture-register" name="prefecture" placeholder="都道府県" {{#edit}}value="{{customer.prefecture}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-address-1"></label>
+                        <input class="p-locality" type="text" id="address-1-register" name="address-1" placeholder="住所１" {{#edit}}value="{{customer.address1}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-address-2"></label>
+                        <input class="p-street-address" type="text" id="address-2-register" name="address-2" placeholder="住所２" {{#edit}}value="{{customer.address2}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-address-3"></label>
+                        <input class="p-extended-address" type="text" id="address-3-register" name="address-3" placeholder="住所３" {{#edit}}value="{{customer.address3}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-phone-number"></label>
+                        <input type="text" id="phone-number-register" name="phone-number" placeholder="電話番号" {{#edit}}value="{{customer.phoneNumber}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="customer-email-address"></label>
+                        <input type="email" id="email-address-register" name="email-address" placeholder="メールアドレス" {{#edit}}value="{{customer.emailAddress}}"{{/edit}}>
+                    </div>
+                    <div class="button-panel">
+                        <input type="button" class="button" id="btn-register" title="register" value="登録">
+                    </div>
+                </form>
+                <div class="form-footer">
+                    <p><a href="#" id="file-register-link">ファイルからインポートする</a></p>
+                    <p><a href="/customer/list/1">お客様一覧</a></p>
+                </div>
+            </div>
+
+            <div class="file-register" id="file-register">
+                <h1>お客様登録</h1>
+                <label class="error-message file" id="message-file-register">*****</label>
+                <form class="customer-file-register" id="customer-file-register" action="/customer/register/file">
+                    <div class="form-item">
+                        <label id="customers-file"></label>
+                        <input type="file" id="file-register" name="file-register" accept="text/csv" placeholder="ファイルを選択">
+                    </div>
+                    <div class="button-panel">
+                        <input type="button" class="button" id="btn-file-register" title="import" value="送信">
+                    </div>
+                </form>
+                <div class="form-footer">
+                    <p><a href="#" id="register-link">フォームから登録する</a></p>
+                    <p><a href="/customer/list/1">お客様一覧</a></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="warning-modal" id="setting-warning-modal">
+        <div class="modal" id="modal"></div>
+        <div class="modal-wrapper">
+            <div class="modal-content">
+                <h1>ファイルを読み込んでいます</h1>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+
+<script type="text/javascript" src="/contents/js/nav-menu.js"></script>
+<script type="text/javascript" src="/contents/js/registration-customer.js"></script>
+<script type="text/javascript" src="/contents/js/transform.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#btn-file-register').click(function () {
+            $('#setting-warning-modal').fadeIn();
+        });
+    });
+</script>
+</body>
+
+</html>

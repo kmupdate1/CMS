@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <link type="text/css" rel="stylesheet" href="/contents/css/common.css">
+    <link type="text/css" rel="stylesheet" href="/contents/css/modal.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <header>
+        <h1><a class="logo" href="/home">お客様管理サービス</a></h1>
+        <div class="nav-wrapper" id="nav-wrapper">
+            <div class="hamburger" id="js-hamburger">
+                <span class="hamburger__line hamburger__line--1"></span>
+                <span class="hamburger__line hamburger__line--2"></span>
+                <span class="hamburger__line hamburger__line--3"></span>
+            </div>
+            <nav class="sp-nav">
+                <h2><b>{{username}}</b>さん</h2>
+                <br>
+                <ul class="nav-list">
+                    <li><a href="/home">ホーム</a></li>
+                    <hr>
+                    <li><a href="/customer/list/1?max=50">お客様情報</a></li>
+                    <li><a href="/product/list/1?max=50">商品情報</a></li>
+                    <li><a href="/order/list/1?max=50">注文情報</a></li>
+                    <li><a href="/receipt/yearly">年間売り上げ照会</a></li>
+                    <li><a href="/receipt/monthly">月間売り上げ照会</a></li>
+                    <hr>
+                    <li><a href="/setting/mypage">マイページ</a></li>
+                    {{#admin}}
+                        <li><a href="/setting/account/list/1?max=50">アカウント一覧</a></li>
+                    {{/admin}}{{^admin}}{{/admin}}
+                    <hr>
+                    <li><a href="/signout">サインアウト</a></li>
+                </ul>
+            </nav>
+            <div class="black-bg" id="js-black-back"></div>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <div class="form-wrapper" id="form-wrapper">
+            <div class="form-register" id="register">
+                <h1>商品登録</h1>
+                <label class="error-message" id="message-register">登録に失敗しました</label>
+                <form class="product-register" id="product-register" action="/product/register{{#edit}}/{{product.id}}{{/edit}}">
+                    <div class="form-item">
+                        <label id="product-name"></label>
+                        <input type="text" id="name-register" name="product-name" placeholder="商品名" {{#edit}}value="{{product.productName}}"{{/edit}} required>
+                    </div>
+                    <div class="form-item">
+                        <label id="product-name-kana"></label>
+                        <input type="text" id="name-kana-register" name="product-name-kana" placeholder="商品名（カナ）" {{#edit}}value="{{product.productNameKana}}"{{/edit}}>
+                    </div>
+                    <div class="form-item">
+                        <label id="product-price"></label>
+                        <input type="text" id="price-register" name="price" placeholder="価格（原価）" {{#edit}}value="{{product.price}}"{{/edit}} required>
+                    </div>
+                    <div>
+                        <label id="product-condition">取扱状況</label>
+                        <input type="checkbox" id="condition-register" name="condition" {{#edit}}{{#product.enabled}}checked="checked"{{/product.enabled}}{{/edit}} required>
+                    </div>
+                    <div class="button-panel">
+                        <input type="button" class="button" id="btn-register" title="register" value="登録">
+                    </div>
+                </form>
+                <div class="form-footer">
+                    <p><a href="/product/list/1">商品一覧</a></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript" src="/contents/js/nav-menu.js"></script>
+<script type="text/javascript" src="/contents/js/registration-product.js"></script>
+</body>
+
+</html>

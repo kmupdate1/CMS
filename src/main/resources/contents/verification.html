@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <link type="text/css" rel="stylesheet" href="/contents/css/common.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <header class="header">
+            <h1>お客様管理サービス</h1>
+        </header>
+
+        <div class="content">
+
+            <div class="form-wrapper" id="form-wrapper">
+                <div class="verification" id="verification">
+                    <h1>パスワード再設定</h1>
+                    <form id="form-verification" method="post" action="/verification" onsubmit="return false;">
+                        <div class="form-item">
+                            <label id="email-verification"></label>
+                            <input type="email" id="input-email-verification" name="email" required="required" placeholder="メールアドレス">
+                        </div>
+                        <div class="button-panel">
+                            <input type="button" class="button" id="btn-send-email" title="Submit" value="送信">
+                        </div>
+                    </form>
+                    <div class="form-footer">
+                        <p><a href="/signing" id="signing-link">キャンセル</a></p>
+                    </div>
+                </div>
+
+                <div class="account-exists" id="account-exist">
+                    <div class="">
+                        <h1>メールを送信しました</h1>
+                        <p>ログイン画面に移動します　<span id="display-sec"></span>秒</p></div>
+                </div>
+
+                <div class="account-not-exists" id="account-not-exists">
+                    <div class="">
+                        <h1>アカウントがありません</h1>
+                    </div>
+                    <div class="form-footer">
+                        <p><a href="#" id="verification-link">戻る</a></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="/contents/js/verification.js"></script>
+</body>
+
+</html>
