@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <link type="text/css" rel="stylesheet" href="/contents/css/common.css">
+    <link type="text/css" rel="stylesheet" href="/contents/css/modal.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <header>
+        <h1><a class="logo" href="/home">お客様管理サービス</a></h1>
+        <div class="nav-wrapper" id="nav-wrapper">
+            <div class="hamburger" id="js-hamburger">
+                <span class="hamburger__line hamburger__line--1"></span>
+                <span class="hamburger__line hamburger__line--2"></span>
+                <span class="hamburger__line hamburger__line--3"></span>
+            </div>
+            <nav class="sp-nav">
+                <h2><b>{{username}}</b>さん</h2>
+                <br>
+                <ul class="nav-list">
+                    <li><a href="/home">ホーム</a></li>
+                    <li><a href="/customer/list/1?max=50">お客様情報</a></li>
+                    <li><a href="/product/list/1?max=50">商品情報</a></li>
+                    <li><a href="/order/list/1?max=50">注文情報</a></li>
+                    <li><a href="/receipt/yearly">年間売り上げ照会</a></li>
+                    <li><a href="/receipt/monthly">月間売り上げ照会</a></li>
+                    <hr>
+                    <li><a href="/setting/mypage">マイページ</a></li>
+                    {{#admin}}
+                        <li><a href="/setting/account/list/1?max=50">アカウント一覧</a></li>
+                    {{/admin}}{{^admin}}{{/admin}}
+                    <hr>
+                    <li><a href="/signout">サインアウト</a></li>
+                </ul>
+            </nav>
+            <div class="black-bg" id="js-black-back"></div>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <div class="form-wrapper" id="form-wrapper">
+            <div class="form-register" id="register">
+                <h1>ユーザ登録</h1>
+                <label class="error-message" id="message-register">登録に失敗しました</label>
+                <form class="user-register" id="user-register" action="/setting/mypage/edit/{{user.accountId}}">
+                    <div class="form-item">
+                        <label id="user-name"></label>
+                        <input type="text" id="name-register" name="name" placeholder="名前" value="{{user.name}}" required>
+                    </div>
+                    <div class="form-item">
+                        <label id="user-name-kana"></label>
+                        <input type="text" id="name-kana-register" name="name-kana" placeholder="名前（カナ）" value="{{user.nameKana}}">
+                    </div>
+                    <div class="form-item">
+                        <label id="user-phone-number"></label>
+                        <input type="text" id="phone-number-register" name="phone-number" placeholder="電話番号" value="{{user.phoneNumber}}">
+                    </div>
+                    <div class="form-item">
+                        <label id="user-email-address"></label>
+                        <input type="text" id="email-address-register" name="email-address" placeholder="メールアドレス" value="{{user.emailAddress}}">
+                    </div>
+                    <div class="button-panel">
+                        <input type="button" class="button" id="btn-register" title="register" value="登録">
+                    </div>
+                </form>
+                <div class="form-footer">
+                    <p><a href="/setting/mypage">マイページ</a></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript" src="/contents/js/nav-menu.js"></script>
+<script type="text/javascript" src="/contents/js/registration-user.js"></script>
+</body>
+
+</html>

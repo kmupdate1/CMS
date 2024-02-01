@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <link type="text/css" rel="stylesheet" href="/contents/css/common.css">
+    <link type="text/css" rel="stylesheet" href="/contents/css/list.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <header>
+            <h1><a class="logo" href="/home">お客様管理サービス</a></h1>
+            <div class="nav-wrapper" id="nav-wrapper">
+                <div class="hamburger" id="js-hamburger">
+                    <span class="hamburger__line hamburger__line--1"></span>
+                    <span class="hamburger__line hamburger__line--2"></span>
+                    <span class="hamburger__line hamburger__line--3"></span>
+                </div>
+                <nav class="sp-nav">
+                    <h2><b>{{username}}</b>さん</h2>
+                    <br>
+                    <ul class="nav-list">
+                        <li><a href="/home">ホーム</a></li>
+                        <hr>
+                        <li><a href="/customer/list/1?max=50">お客様情報</a></li>
+                        <li><a href="/product/list/1?max=50">商品情報</a></li>
+                        <li><a href="/order/list/1?max=50">注文情報</a></li>
+                        <li><a href="/receipt/yearly">年間売り上げ照会</a></li>
+                        <li><a href="/receipt/monthly">月間売り上げ照会</a></li>
+                        <hr>
+                        <li><a href="/setting/mypage">マイページ</a></li>
+                        {{#admin}}
+                            <li><a href="/setting/account/list/1?max=50">アカウント一覧</a></li>
+                        {{/admin}}{{^admin}}{{/admin}}
+                        <hr>
+                        <li><a href="/signout">サインアウト</a></li>
+                    </ul>
+                </nav>
+                <div class="black-bg" id="js-black-back"></div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <div class="title">
+                <h2>注文情報一覧</h2>
+                <form method="post" action="/order/list" id="max">
+                    <label for="order-size">表示数:{{max}}</label>
+                    <select class="selector" name="order-size" id="order-size" onchange="this.form.submit();">
+                        <option selected>---</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <label style="display: none">
+                        <select name="customer_id" style="display: none" onchange="this.form.submit();">
+                            <option>{{customer.id}}</option>
+                        </select>
+                    </label>
+                </form>
+            </div>
+
+            {{#is_record}}
+                <div class="condition">
+                    {{#individual}}{{/individual}}
+                    {{^individual}}{{/individual}}
+                    <h1 class="condition_title">検索条件</h1>
+                    <div class="condition_area">
+
+                    </div>
+                </div>
+                <div class="list-table">
+                    <table class="list">
+                        <thead class="list-head">
+                        <tr class="list-body-row">
+                            <th class="list-column">お客様名</th>
+                            <th class="list-column">お客様名（カナ）</th>
+                            <th class="list-column">都道府県</th>
+                            <th class="list-column">電話番号</th>
+                            <th class="list-column">メールアドレス</th>
+                            <th class="list-column">購入日時</th>
+                            <th class="list-column">詳細</th>
+                        </tr>
+                        </thead>
+                        <tbody class="list-body">
+                        {{#orders}}
+                            <tr class="list-body-row">
+                                <td class="list-recode">{{name}}</td>
+                                <td class="list-recode">{{nameKana}}</td>
+                                <td class="list-recode">{{prefecture}}</td>
+                                <td class="list-recode">{{phoneNumber}}</td>
+                                <td class="list-recode">{{emailAddress}}</td>
+                                <td class="list-recode">{{ordersOrderDate}}</td>
+                                <td class="list-recode">
+                                    <a class="link-edit" href="/order/details/{{id}}/{{ordersId}}">
+                                        <img class="img-edit" src="/contents/image/content/details.png">
+                                    </a>
+                                </td>
+                            </tr>
+                        {{/orders}}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-wrapper">
+                    {{#paging}}
+                        <div class="pagination previous"><a href="/order/list/{{previous}}{{queryMax}}{{queryCustomer}}">＜＜</a></div>
+                        <div class="pagination current"><p>{{numerator}}/{{denominator}} ページ</p></div>
+                        <div class="pagination next"><a href="/order/list/{{next}}{{queryMax}}{{queryCustomer}}">＞＞</a></div>
+                    {{/paging}}
+                </div>
+            {{/is_record}}
+            {{^is_record}}
+                <div class="condition">
+                    <h1 class="is-not-record">注文情報が見つかりません</h1>
+                </div>
+            {{/is_record}}
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript" src="/contents/js/nav-menu.js"></script>
+    <script type="text/javascript">
+        const url = location.search;
+        $(function () {
+            $('#order-size').change(function () {
+                $('#max').submit();
+            });
+        });
+    </script>
+</body>
+
+</html>

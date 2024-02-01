@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <link type="text/css" rel="stylesheet" href="/contents/css/common.css">
+    <link type="text/css" rel="stylesheet" href="/contents/css/list.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <header>
+        <h1><a class="logo" href="/home">お客様管理サービス</a></h1>
+        <div class="nav-wrapper" id="nav-wrapper">
+            <div class="hamburger" id="js-hamburger">
+                <span class="hamburger__line hamburger__line--1"></span>
+                <span class="hamburger__line hamburger__line--2"></span>
+                <span class="hamburger__line hamburger__line--3"></span>
+            </div>
+            <nav class="sp-nav">
+                <h2><b>{{username}}</b>さん</h2>
+                <br>
+                <ul class="nav-list">
+                    <li><a href="/home">ホーム</a></li>
+                    <hr>
+                    <li><a href="/customer/list/1?max=50">お客様情報</a></li>
+                    <li><a href="/product/list/1?max=50">商品情報</a></li>
+                    <li><a href="/order/list/1?max=50">注文情報</a></li>
+                    <li><a href="/receipt/yearly">年間売り上げ照会</a></li>
+                    <li><a href="/receipt/monthly">月間売り上げ照会</a></li>
+                    <hr>
+                    <li><a href="/setting/mypage">マイページ</a></li>
+                    {{#admin}}
+                        <li><a href="/setting/account/list/1?max=50">アカウント一覧</a></li>
+                    {{/admin}}{{^admin}}{{/admin}}
+                    <hr>
+                    <li><a href="/signout">サインアウト</a></li>
+                </ul>
+            </nav>
+            <div class="black-bg" id="js-black-back"></div>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <div class="title">
+            <h2>商品一覧</h2>
+            {{#admin}}
+                <a href="/product/register">新規登録</a>
+            {{/admin}}
+            <form method="post" action="/product/list" id="max">
+                <label for="product-size">表示数:{{max}}</label>
+                <select class="selector" name="product-size" id="product-size" onchange="this.form.submit();">
+                    <option selected>---</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </form>
+        </div>
+
+        <div class="condition">
+            <h1 class="condition_title">検索条件</h1>
+        </div>
+
+        <div class="list-table">
+            <table class="list">
+                <thead class="list-head">
+                    <tr class="list-body-row">
+                        <th class="list-column">商品名</th>
+                        <th class="list-column">商品名（カナ）</th>
+                        <th class="list-column">価格（税込）</th>
+                        <th class="list-column">取扱状況</th>
+                        {{#admin}}
+                            <th class="list-column">編集</th>
+                        {{/admin}}
+                    </tr>
+                </thead>
+                <tbody class="list-body">
+                {{#products}}
+                    <tr class="list-body-row">
+                        <td class="list-recode">{{productName}}</td>
+                        <td class="list-recode">{{productNameKana}}</td>
+                        <td class="list-recode">{{formattedPrice}}円（{{tax}}円）</td>
+                        <td class="list-recode">{{condition}}</td>
+                        {{#admin}}
+                            <td class="list-recode">
+                                <a class="link-edit" href="/product/edit/{{id}}">
+                                    <img class="img-edit" src="/contents/image/content/edit.png" alt="editable">
+                                </a>
+                            </td>
+                        {{/admin}}
+                    </tr>
+                {{/products}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-wrapper">
+            {{#paging}}
+                <div class="pagination previous"><a href="/product/list/{{previous}}{{queryMax}}">＜＜</a></div>
+                <div class="pagination current"><p>{{numerator}}/{{denominator}} ページ</p></div>
+                <div class="pagination next"><a href="/product/list/{{next}}{{queryMax}}">＞＞</a></div>
+            {{/paging}}
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script src="/contents/js/nav-menu.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#product-size').change(function () {
+            $('#max').submit();
+        });
+    });
+</script>
+
+</body>
+
+</html>

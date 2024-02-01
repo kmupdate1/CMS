@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>お客様管理サービス</title>
+    <link type="image/jpeg" rel="icon" href="/contents/image/icon/wataju.jpg">
+    <link type="text/css" rel="stylesheet" href="/contents/css/common.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <header>
+            <h1><a class="logo" href="/home">お客様管理サービス</a></h1>
+            <div class="nav-wrapper" id="nav-wrapper">
+                <div class="hamburger" id="js-hamburger">
+                    <span class="hamburger__line hamburger__line--1"></span>
+                    <span class="hamburger__line hamburger__line--2"></span>
+                    <span class="hamburger__line hamburger__line--3"></span>
+                </div>
+                <nav class="sp-nav">
+                    <h2><b>{{username}}</b>さん</h2>
+                    <br>
+                    <ul class="nav-list">
+                        <li><a href="/home">ホーム</a></li>
+                        <hr>
+                        <li><a href="/customer/list/1?max=50">お客様情報</a></li>
+                        <li><a href="/product/list/1?max=50">商品情報</a></li>
+                        <li><a href="/order/list/1?max=50">注文情報</a></li>
+                        <li><a href="/receipt/yearly">年間売り上げ照会</a></li>
+                        <li><a href="/receipt/monthly">月間売り上げ照会</a></li>
+                        <hr>
+                        <li><a href="/setting/mypage">マイページ</a></li>
+                        {{#admin}}
+                            <li><a href="/setting/account/list/1?max=50">アカウント一覧</a></li>
+                        {{/admin}}{{^admin}}{{/admin}}
+                        <hr>
+                        <li><a href="/signout">サインアウト</a></li>
+                    </ul>
+                </nav>
+                <div class="black-bg" id="js-black-back"></div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <div class="title">
+                <h2>注文情報：{{customer.name}}様</h2>
+            </div>
+            <div class="title">
+                <h4>注文日時：{{order.orderDate}}</h4>
+            </div>
+            <div class="list-table" style="margin-bottom: 50px;">
+                <table class="list">
+                    <thead class="list-head">
+                    <tr class="list-body-row">
+                        <th class="list-column">商品名</th>
+                        <th class="list-column">価格</th>
+                        <th class="list-column">購入数</th>
+                        <th class="list-column">原価合計</th>
+                        <th class="list-column">ケース代</th>
+                        <th class="list-column">送料</th>
+                        <th class="list-column">合計</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{#concrete_data}}
+                            <tr class="list-body-row">
+                                <td class="list-recode"><p>{{productName}}</p></td>
+                                <td class="list-recode"><p>{{price_formatted}}円</p></td>
+                                <td class="list-recode"><p>{{amount}}</p></td>
+                                <td class="list-recode"><p>{{total_formatted}}円</p></td>
+                                <td class="list-recode"><p>-</p></td>
+                                <td class="list-recode"><p>-</p></td>
+                                <td class="list-recode"><p>{{total_tax_formatted}}円</p></td>
+                            </tr>
+                        {{/concrete_data}}
+                    </tbody>
+                    <thead class="list-head">
+                        {{#abstract_data}}
+                            <tr class="list-body-row">
+                                <th class="list-column" colspan="2">合計</th>
+                                <th class="list-column">{{amount}}</th>
+                                <th class="list-column">{{total_formatted}}円</th>
+                                <th class="list-column">{{boxCharge_tax_formatted}}円</th>
+                                <th class="list-column">{{deliveryCharge_formatted}}円</th>
+                                <th class="list-column">{{totals_sum_formatted}}円</th>
+                            </tr>
+                        {{/abstract_data}}
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="/contents/js/nav-menu.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</body>
+
+</html>
